@@ -47,7 +47,7 @@
   networking.useDHCP = true;
   networking.interfaces.wlp2s0.ipv4.addresses = [ { address = "192.168.0.210"; prefixLength = 24; } ];
   networking.defaultGateway = { address = "192.168.0.1"; interface = "wlp2s0"; };
-  networking.nameservers = [ "192.168.0.1" ];
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" "8.8.8.8" ];
   networking.dhcpcd.denyInterfaces = [ "docker*" "br-*" "veth*" ];   # sem DHCP/IPv4LL nas bridges do Docker
 
   networking.wireless = {
@@ -88,6 +88,9 @@
   services.tailscale = {
     enable = true;
     openFirewall = true;   # UDP 41641 → conexões diretas em vez de DERP
+    # MagicDNS sobrescreve networking.nameservers e encaminha para os "global
+    # nameservers" da tailnet; sem eles definidos, toda resolucao externa quebra.
+    extraSetFlags = [ "--accept-dns=false" ];
     # primeiro boot: `sudo tailscale up --ssh` (autenticação interativa, uma vez)
   };
 

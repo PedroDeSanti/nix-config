@@ -163,12 +163,7 @@
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;   # dedup por hardlink no store
   };
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    randomizedDelaySec = "45min";   # não coincidir com fstrim/docker-prune (todos "weekly" = seg 00:00)
-    options = "--delete-older-than 14d";
-  };
+  # nix.gc desativado: programs.nh.clean faz o GC (gerações, result/, perfis HM).
 
   # ── Sistema ─────────────────────────────────────────────────────────────────
   time.timeZone = "America/Sao_Paulo";
@@ -189,6 +184,14 @@
     ncdu iotop tcpdump
     compsize   # `compsize /srv` → taxa real de compressão do Btrfs
   ];
+
+  # nh: `nh os switch` resolve nixosConfigurations.$(hostname) neste flake, mostra o diff
+  # de gerações antes de ativar e faz GC semanal (gerações + result/ + perfis do HM).
+  programs.nh = {
+    enable = true;
+    flake = "/home/santi/nix-config";
+    clean = { enable = true; extraArgs = "--keep-since 7d --keep 5"; };
+  };
 
   # Não mude após a instalação: só diz qual formato de dados de estado o sistema assume.
   system.stateVersion = "26.05";

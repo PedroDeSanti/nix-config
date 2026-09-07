@@ -167,6 +167,8 @@
   };
   console.keyMap = "br-abnt2";
 
+  programs.nix-ld.enable = true;   # loader for foreign binaries (VS Code Server, prebuilt tools)
+
   environment.systemPackages = with pkgs; [
     vim git tmux htop btop
     lm_sensors smartmontools

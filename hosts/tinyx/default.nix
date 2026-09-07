@@ -2,7 +2,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Boot
+  # ── Boot ────────────────────────────────────────────────────────────────────────
   boot.loader.systemd-boot = {
     enable = true;
     configurationLimit = 10;   # ~60-90 MB per generation; fits a 1 GiB ESP
@@ -17,7 +17,7 @@
   boot.initrd.systemd.emergencyAccess = true;
 
   boot.kernelParams = [
-    # zswap in front of the swap partition; zram rejected (LRU inversion, cgroup accounting).
+    # zswap: compressed cache in front of the swap partition.
     "zswap.enabled=1"
     "zswap.compressor=zstd"
     "zswap.max_pool_percent=25"
@@ -38,7 +38,7 @@
 
   hardware.enableRedistributableFirmware = true;   # iwlwifi firmware, Intel microcode
 
-  # Network
+  # ── Network ─────────────────────────────────────────────────────────────────────
   networking.hostName = "tinyx";
   # The ISP router has no DHCP reservations. Its pool is shrunk to .2-.201 and
   # wlp2s0 gets a static address outside it. eno1 stays on DHCP as a cable rescue path.
@@ -68,7 +68,7 @@
     trustedInterfaces = [ "tailscale0" ];
   };
 
-  # Access
+  # ── Access ──────────────────────────────────────────────────────────────────────
   services.openssh = {
     enable = true;
     authorizedKeysInHomedir = false;   # only keys declared here are valid
@@ -102,7 +102,7 @@
   # The SSH key is the security boundary; remote `nixos-rebuild --use-remote-sudo` needs this.
   security.sudo.wheelNeedsPassword = false;
 
-  # Containers
+  # ── Containers ──────────────────────────────────────────────────────────────────
   virtualisation.docker = {
     enable = true;
     liveRestore = true;   # detached stacks survive a dockerd restart
@@ -139,7 +139,7 @@
     extraArgs = [ "--avoid" "^(dockerd|containerd|containerd-shim.*|tailscaled|sshd|systemd.*|wpa_supplicant|dhcpcd)$" ];
   };
 
-  # Storage
+  # ── Storage ─────────────────────────────────────────────────────────────────────
   services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
@@ -149,14 +149,13 @@
   services.smartd.enable = true;
   services.journald.extraConfig = "SystemMaxUse=500M";
 
-  # Nix
+  # ── Nix ─────────────────────────────────────────────────────────────────────────
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
   };
-  # No nix.gc: programs.nh.clean below handles garbage collection.
 
-  # System
+  # ── System ──────────────────────────────────────────────────────────────────────
   time.timeZone = "America/Sao_Paulo";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -174,7 +173,7 @@
     lm_sensors smartmontools
     pciutils usbutils ethtool dig
     kitty.terminfo   # SSH sessions from kitty set TERM=xterm-kitty
-    iw               # no longer installed implicitly in 26.05
+    iw
     ncdu iotop tcpdump
     compsize         # actual Btrfs compression ratio
   ];

@@ -11,7 +11,7 @@ in
 {
   disko.devices.disk = {
 
-    # Micron 2450 NVMe 512 GB: system
+    # ── Micron 2450 NVMe 512 GB: system ──────────────────────────────────────────
     nvme = {
       type = "disk";
       # Namespaced form (`_1`); the unsuffixed alias is deprecated in systemd 260.
@@ -58,7 +58,7 @@ in
       };
     };
 
-    # Kingston A400 SATA 480 GB: cold data (DRAM-less, no databases here)
+    # ── Kingston A400 SATA 480 GB: cold data (DRAM-less, no databases here) ─────
     dados = {
       type = "disk";
       device = "/dev/disk/by-id/ata-KINGSTON_SA400S37480G_50026B768324FE9C";

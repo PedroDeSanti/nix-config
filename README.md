@@ -32,8 +32,6 @@ Declarative NixOS configuration for my machines, managed as a single flake
 - **home/santi/** - [home-manager](https://github.com/nix-community/home-manager) configuration, same `common/{core,optional}` split. `<host>.nix` picks what each machine gets.
 - **flake.nix** - Inputs (pinned in `flake.lock`) and one `nixosConfigurations.<host>` per machine.
 
-The layout follows the [Misterio77](https://github.com/Misterio77/nix-config) / [EmergentMind](https://github.com/EmergentMind/nix-config) convention. Hosts only import; there are no custom `enable` options or frameworks on top of flakes.
-
 ## 🖥️ Hosts
 
 | Host | Hardware | Role |

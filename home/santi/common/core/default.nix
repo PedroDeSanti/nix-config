@@ -1,4 +1,4 @@
-# Core: presente em TODO host. Se não for de todos, vai para ../optional/.
+# Present on every host. Anything host-specific goes in ../optional/.
 { ... }: {
   imports = [ ./git.nix ];
 }

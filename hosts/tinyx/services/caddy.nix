@@ -42,11 +42,18 @@
         '';
       };
 
-      # Public tier, fed by the tunnel. Services get their own `http://name.desanti.dev`
-      # blocks; anything else is a 404.
+      # Public tier, fed by the tunnel on :8080. Services are `@name host name.desanti.dev`
+      # + handle blocks, like the private tier; anything else is a 404.
       "http://:8080" = {
         extraConfig = ''
-          import not-found
+          @ha host ha.desanti.dev
+          handle @ha {
+            reverse_proxy 127.0.0.1:8123
+          }
+
+          handle {
+            import not-found
+          }
         '';
       };
     };

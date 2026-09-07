@@ -180,6 +180,7 @@
     vim git tmux htop btop
     lm_sensors smartmontools
     pciutils usbutils ethtool dig
+    kitty.terminfo   # TERM=xterm-kitty nas sessões SSH (só o terminfo; kitty em si é do desktop)
     iw         # `iw dev`/`iw wlan0 link`: resgate Wi-Fi (26.05 parou de instalar implicitamente)
     ncdu iotop tcpdump
     compsize   # `compsize /srv` → taxa real de compressão do Btrfs

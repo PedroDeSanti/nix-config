@@ -6,7 +6,7 @@
 let
   btrfsOpts = [ "compress=zstd" "noatime" ];
   # Boot must not depend on the data disk; don't wait 90 s for a dead one.
-  dadosOpts = btrfsOpts ++ [ "nofail" "x-systemd.device-timeout=15s" ];
+  dataOpts = btrfsOpts ++ [ "nofail" "x-systemd.device-timeout=15s" ];
 in
 {
   disko.devices.disk = {
@@ -59,20 +59,20 @@ in
     };
 
     # ── Kingston A400 SATA 480 GB: cold data (DRAM-less, no databases here) ─────
-    dados = {
+    data = {
       type = "disk";
       device = "/dev/disk/by-id/ata-KINGSTON_SA400S37480G_50026B768324FE9C";
       content = {
         type = "gpt";
-        partitions.dados = {
+        partitions.data = {
           size = "100%";
           content = {
             type = "btrfs";
-            extraArgs = [ "-f" "-L" "dados" ];
+            extraArgs = [ "-f" "-L" "data" ];
             subvolumes = {
               # A subvolume rather than the top-level: the top-level cannot be snapshotted.
-              "/@dados"     = { mountpoint = "/mnt/dados";            mountOptions = dadosOpts; };
-              "/@snapshots" = { mountpoint = "/mnt/dados/.snapshots"; mountOptions = dadosOpts; };
+              "/@data"      = { mountpoint = "/mnt/data";            mountOptions = dataOpts; };
+              "/@snapshots" = { mountpoint = "/mnt/data/.snapshots"; mountOptions = dataOpts; };
             };
           };
         };

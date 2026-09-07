@@ -145,7 +145,7 @@
   services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
-    fileSystems = [ "/" "/mnt/dados" ];
+    fileSystems = [ "/" "/mnt/data" ];
   };
   services.fstrim.enable = true;
   services.smartd.enable = true;

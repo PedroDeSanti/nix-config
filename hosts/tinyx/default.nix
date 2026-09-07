@@ -2,6 +2,8 @@
 { config, pkgs, lib, ... }:
 
 {
+  imports = [ ./services ];
+
   # ── Boot ────────────────────────────────────────────────────────────────────────
   boot.loader.systemd-boot = {
     enable = true;

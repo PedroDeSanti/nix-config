@@ -26,7 +26,15 @@
             dns cloudflare {env.CLOUDFLARE_API_TOKEN}
           }
 
-          # Services are added here as `@name host name.lab.desanti.dev` + handle blocks.
+          @ha host ha.lab.desanti.dev
+          handle @ha {
+            reverse_proxy 127.0.0.1:8123
+          }
+
+          @z2m host z2m.lab.desanti.dev
+          handle @z2m {
+            reverse_proxy 127.0.0.1:8099
+          }
 
           handle {
             import not-found

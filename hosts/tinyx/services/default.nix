@@ -4,5 +4,8 @@
     ./cloudflared.nix
     ./btrbk.nix
     ./restic.nix
+    ./mosquitto.nix
+    ./zigbee2mqtt.nix
+    ./home-assistant.nix
   ];
 }

@@ -22,6 +22,10 @@
     ];
   };
 
+  # Plain HTTP on the LAN: the HA "internal URL" that phones on the home Wi-Fi and LAN
+  # devices fetching media use. Works with no internet and no tailnet.
+  networking.firewall.interfaces.wlp2s0.allowedTCPPorts = [ 8123 ];
+
   systemd.services.docker-homeassistant = {
     after = [ "mosquitto.service" ];
     wants = [ "mosquitto.service" ];

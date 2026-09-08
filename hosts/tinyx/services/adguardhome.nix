@@ -3,7 +3,7 @@
 # record keeps the tailnet IP for everyone else. Upstreams over DNS-over-HTTPS.
 #
 # The router hands this out via DHCP (DNSv4 page: primary 192.168.0.210, secondary the
-# ISP resolver as fallback). Ad-blocking lists are present but disabled; flip `enabled`.
+# ISP resolver as fallback). Ad-blocking: the AdGuard DNS filter list is enabled.
 # Web UI on 127.0.0.1:3000, reached through Caddy (adguard.lab.desanti.dev); login santi,
 # password in /etc/secrets/adguard-ui.pass (only its bcrypt hash lives here).
 #
@@ -37,7 +37,7 @@
       filtering = {
         protection_enabled = true;
         # Observed (not documented): rewrites only apply while the filtering engine is on,
-        # so this stays true even with every blocklist disabled (filters[].enabled).
+        # so this would stay true even with every blocklist disabled (filters[].enabled).
         filtering_enabled = true;
         # `enabled` must be explicit (schema >= 29 defaults it to false). The wildcard does
         # not cover the bare name, hence two entries. AAAA for these names returns empty.
@@ -49,7 +49,7 @@
       filters = [
         {
           id = 1;
-          enabled = false;
+          enabled = true;
           name = "AdGuard DNS filter";
           url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt";
         }

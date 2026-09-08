@@ -36,6 +36,11 @@
             reverse_proxy 127.0.0.1:8099
           }
 
+          @matter host matter.lab.desanti.dev
+          handle @matter {
+            reverse_proxy 127.0.0.1:8482
+          }
+
           handle {
             import not-found
           }

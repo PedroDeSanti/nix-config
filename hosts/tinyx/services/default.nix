@@ -8,5 +8,6 @@
     ./zigbee2mqtt.nix
     ./home-assistant.nix
     ./matter-hub.nix
+    ./adguardhome.nix
   ];
 }

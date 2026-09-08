@@ -5,6 +5,9 @@
 #                        loopback only). Unknown names get the 404 page.
 { pkgs, ... }:
 {
+  # HTTPS (and the HTTP redirect) on the LAN too: *.lab names resolve to the LAN IP at home.
+  networking.firewall.interfaces.wlp2s0.allowedTCPPorts = [ 80 443 ];
+
   services.caddy = {
     enable = true;
     package = pkgs.caddy.withPlugins {
@@ -39,6 +42,11 @@
           @matter host matter.lab.desanti.dev
           handle @matter {
             reverse_proxy 127.0.0.1:8482
+          }
+
+          @adguard host adguard.lab.desanti.dev
+          handle @adguard {
+            reverse_proxy 127.0.0.1:3000
           }
 
           handle {

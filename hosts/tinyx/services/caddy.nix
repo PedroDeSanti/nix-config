@@ -1,9 +1,11 @@
 # Reverse proxy for both tiers of names:
-#   *.lab.desanti.dev  - private. DNS points at the tailnet IP; HTTPS with a wildcard
-#                        certificate obtained through the Cloudflare DNS-01 challenge.
+#   *.lab.desanti.dev  - private. DNS points at the tailnet IP (AdGuard rewrites it to the
+#                        LAN IP at home); HTTPS with a wildcard certificate via DNS-01.
 #   *.desanti.dev      - public. Arrives over the Cloudflare Tunnel on :8080 (plain HTTP,
 #                        loopback only). Unknown names get the 404 page.
-{ pkgs, ... }:
+# Per-service routes are generated from `tinyx.services` (see registry.nix); nothing
+# service-specific lives here.
+{ config, pkgs, ... }:
 {
   # HTTPS (and the HTTP redirect) on the LAN too: *.lab names resolve to the LAN IP at home.
   networking.firewall.interfaces.wlp2s0.allowedTCPPorts = [ 80 443 ];
@@ -23,52 +25,24 @@
 
     virtualHosts = {
       # Private tier: one wildcard certificate, host-based routing inside.
-      "*.lab.desanti.dev" = {
-        extraConfig = ''
-          tls {
-            dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-          }
+      "*.lab.desanti.dev".extraConfig = ''
+        tls {
+          dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        }
 
-          @ha host ha.lab.desanti.dev
-          handle @ha {
-            reverse_proxy 127.0.0.1:8123
-          }
+        ${config.tinyx.caddy.labRoutes}
+        handle {
+          import not-found
+        }
+      '';
 
-          @z2m host z2m.lab.desanti.dev
-          handle @z2m {
-            reverse_proxy 127.0.0.1:8099
-          }
-
-          @matter host matter.lab.desanti.dev
-          handle @matter {
-            reverse_proxy 127.0.0.1:8482
-          }
-
-          @adguard host adguard.lab.desanti.dev
-          handle @adguard {
-            reverse_proxy 127.0.0.1:3000
-          }
-
-          handle {
-            import not-found
-          }
-        '';
-      };
-
-      # Public tier, fed by the tunnel on :8080. Services are `@name host name.desanti.dev`
-      # + handle blocks, like the private tier; anything else is a 404.
-      "http://:8080" = {
-        extraConfig = ''
-          @ha host ha.desanti.dev
-          handle @ha {
-            reverse_proxy 127.0.0.1:8123
-          }
-
-          handle {
-            import not-found
-          }
-        '';
-      };
+      # Public tier, fed by the tunnel on :8080.
+      "http://:8080".extraConfig = ''
+        ${config.tinyx.caddy.publicRoutes}
+        handle {
+          import not-found
+        }
+      '';
     };
 
     extraConfig = ''
@@ -82,11 +56,12 @@
     '';
   };
 
-  tinyx.homepage.groups.Infra = [{
-    "Caddy" = {
-      icon = "caddy.png";
-      description = "Proxy reverso, *.lab e tunel";
-      siteMonitor = "http://127.0.0.1:8080";
-    };
-  }];
+  tinyx.services.caddy = {
+    name = "Caddy";
+    group = "Infra";
+    order = 30;
+    icon = "caddy.png";
+    description = "Proxy reverso, *.lab e tunel";
+    monitor = "http://127.0.0.1:8080";
+  };
 }

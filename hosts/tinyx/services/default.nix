@@ -10,5 +10,6 @@
     ./matter-hub.nix
     ./adguardhome.nix
     ./homepage.nix
+    ./registry.nix
   ];
 }

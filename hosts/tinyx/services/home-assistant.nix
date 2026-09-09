@@ -31,13 +31,15 @@
     wants = [ "mosquitto.service" ];
   };
 
-  tinyx.homepage.groups.Casa = [{
-    "Home Assistant" = {
-      icon = "home-assistant.png";
-      href = "https://ha.lab.desanti.dev";
-      description = "Automacao da casa";
-      siteMonitor = "http://127.0.0.1:8123";
-      widget = { type = "homeassistant"; url = "http://127.0.0.1:8123"; key = "{{HOMEPAGE_VAR_HA_TOKEN}}"; };
-    };
-  }];
+  tinyx.services.homeassistant = {
+    name = "Home Assistant";
+    subdomain = "ha";
+    port = 8123;
+    public = true;
+    group = "Casa";
+    order = 10;
+    icon = "home-assistant.png";
+    description = "Automacao da casa";
+    widget = { type = "homeassistant"; url = "http://127.0.0.1:8123"; key = "{{HOMEPAGE_VAR_HA_TOKEN}}"; };
+  };
 }

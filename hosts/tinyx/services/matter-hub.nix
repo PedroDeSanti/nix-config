@@ -36,12 +36,13 @@
     allowedTCPPorts = [ 5540 5541 ];
   };
 
-  tinyx.homepage.groups.Casa = [{
-    "Matter Hub" = {
-      icon = "matter.png";
-      href = "https://matter.lab.desanti.dev";
-      description = "Ponte Matter para a Alexa";
-      siteMonitor = "http://127.0.0.1:8482";
-    };
-  }];
+  tinyx.services.matter-hub = {
+    name = "Matter Hub";
+    subdomain = "matter";
+    port = 8482;
+    group = "Casa";
+    order = 30;
+    icon = "matter.png";
+    description = "Ponte Matter para a Alexa";
+  };
 }

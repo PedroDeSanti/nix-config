@@ -83,13 +83,14 @@
     allowedTCPPorts = [ 53 ];
   };
 
-  tinyx.homepage.groups.Infra = [{
-    "AdGuard Home" = {
-      icon = "adguard-home.png";
-      href = "https://adguard.lab.desanti.dev";
-      description = "DNS da casa, split-horizon e bloqueio";
-      siteMonitor = "http://127.0.0.1:3000";
-      widget = { type = "adguard"; url = "http://127.0.0.1:3000"; username = "santi"; password = "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"; };
-    };
-  }];
+  tinyx.services.adguardhome = {
+    name = "AdGuard Home";
+    subdomain = "adguard";
+    port = 3000;
+    group = "Infra";
+    order = 10;
+    icon = "adguard-home.png";
+    description = "DNS da casa, split-horizon e bloqueio";
+    widget = { type = "adguard"; url = "http://127.0.0.1:3000"; username = "santi"; password = "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"; };
+  };
 }

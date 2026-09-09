@@ -2,8 +2,9 @@
 # 192.168.0.210 and reach Caddy directly (no tunnel, works without internet); the public
 # record keeps the tailnet IP for everyone else. Upstreams over DNS-over-HTTPS.
 #
-# The router hands this out via DHCP (DNSv4 page: primary 192.168.0.210, secondary the
-# ISP resolver as fallback). Ad-blocking: the AdGuard DNS filter list is enabled.
+# The router hands this out via DHCP (DNSv4 page: primary 192.168.0.210, secondary the ISP
+# resolver). Never use 1.1.1.1/8.8.8.8/9.9.9.9 there: Chrome auto-upgrades to that provider's
+# DoH and bypasses us. Ad-blocking: HaGeZi Pro + TIF + AdGuard DNS filter.
 # Web UI on 127.0.0.1:3000, reached through Caddy (adguard.lab.desanti.dev); login santi,
 # password in /etc/secrets/adguard-ui.pass (only its bcrypt hash lives here).
 #
@@ -36,8 +37,7 @@
       };
       filtering = {
         protection_enabled = true;
-        # Observed (not documented): rewrites only apply while the filtering engine is on,
-        # so this would stay true even with every blocklist disabled (filters[].enabled).
+        # Observed (not documented): rewrites only apply while the filtering engine is on.
         filtering_enabled = true;
         # `enabled` must be explicit (schema >= 29 defaults it to false). The wildcard does
         # not cover the bare name, hence two entries. AAAA for these names returns empty.
@@ -46,13 +46,26 @@
           { domain = "lab.desanti.dev";   answer = "192.168.0.210"; enabled = true; }
         ];
       };
+      # Blocklists from the built-in catalog (HostlistsRegistry ids), refreshed every 24 h.
+      # One solid base list + a threat feed, not a stack of overlapping lists.
       filters = [
-        {
-          id = 1;
-          enabled = true;
-          name = "AdGuard DNS filter";
-          url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt";
-        }
+        { id = 1;  enabled = true; name = "AdGuard DNS filter";
+          url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt"; }
+        { id = 48; enabled = true; name = "HaGeZi Pro";
+          url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_48.txt"; }
+        { id = 44; enabled = true; name = "HaGeZi Threat Intelligence Feeds";
+          url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_44.txt"; }
+      ];
+      # Allowlist: tracking redirectors behind promo/affiliate links, so links from e-mails
+      # and Instagram keep opening.
+      whitelist_filters = [
+        { id = 45; enabled = true; name = "HaGeZi Allowlist Referral";
+          url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_45.txt"; }
+      ];
+      # Known false positives (hagezi/dns-blocklists#7174): the Itau app needs these.
+      user_rules = [
+        "@@||mobilepessoafisica.itau.com.br^"
+        "@@||banner2.itau.com.br^"
       ];
       querylog = { enabled = true; interval = "168h"; };
       statistics = { enabled = true; interval = "24h"; };

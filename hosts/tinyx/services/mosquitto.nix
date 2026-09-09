@@ -29,4 +29,12 @@
   };
 
   systemd.tmpfiles.rules = [ "d /srv/mosquitto 0700 mosquitto mosquitto -" ];
+
+  tinyx.homepage.groups.Infra = [{
+    "Mosquitto" = {
+      icon = "mosquitto.png";
+      description = "Broker MQTT, porta 1883";
+      siteMonitor = "tcp://127.0.0.1:1883";
+    };
+  }];
 }

@@ -82,4 +82,14 @@
     allowedUDPPorts = [ 53 ];
     allowedTCPPorts = [ 53 ];
   };
+
+  tinyx.homepage.groups.Infra = [{
+    "AdGuard Home" = {
+      icon = "adguard-home.png";
+      href = "https://adguard.lab.desanti.dev";
+      description = "DNS da casa, split-horizon e bloqueio";
+      siteMonitor = "http://127.0.0.1:3000";
+      widget = { type = "adguard"; url = "http://127.0.0.1:3000"; username = "santi"; password = "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"; };
+    };
+  }];
 }

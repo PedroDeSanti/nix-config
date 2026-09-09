@@ -35,4 +35,13 @@
     allowedUDPPorts = [ 5353 5540 5541 ];
     allowedTCPPorts = [ 5540 5541 ];
   };
+
+  tinyx.homepage.groups.Casa = [{
+    "Matter Hub" = {
+      icon = "matter.png";
+      href = "https://matter.lab.desanti.dev";
+      description = "Ponte Matter para a Alexa";
+      siteMonitor = "http://127.0.0.1:8482";
+    };
+  }];
 }

@@ -58,4 +58,13 @@ in
 
   # Migrated state arrives root-owned; fix ownership at activation, before the service starts.
   systemd.tmpfiles.rules = [ "Z /srv/zigbee2mqtt 0750 zigbee2mqtt zigbee2mqtt -" ];
+
+  tinyx.homepage.groups.Casa = [{
+    "Zigbee2MQTT" = {
+      icon = "zigbee2mqtt.png";
+      href = "https://z2m.lab.desanti.dev";
+      description = "Rede Zigbee, ZBDongle-E";
+      siteMonitor = "http://127.0.0.1:8099";
+    };
+  }];
 }

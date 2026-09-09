@@ -81,4 +81,12 @@
       }
     '';
   };
+
+  tinyx.homepage.groups.Infra = [{
+    "Caddy" = {
+      icon = "caddy.png";
+      description = "Proxy reverso, *.lab e tunel";
+      siteMonitor = "http://127.0.0.1:8080";
+    };
+  }];
 }

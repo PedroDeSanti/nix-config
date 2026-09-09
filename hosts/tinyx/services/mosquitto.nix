@@ -36,6 +36,5 @@
     order = 20;
     icon = "mosquitto.png";
     description = "Broker MQTT, porta 1883";
-    monitor = "tcp://127.0.0.1:1883";
   };
 }

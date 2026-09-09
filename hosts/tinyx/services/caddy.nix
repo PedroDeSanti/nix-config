@@ -38,6 +38,9 @@
 
       # Public tier, fed by the tunnel on :8080.
       "http://:8080".extraConfig = ''
+        handle /healthz {
+          respond 200
+        }
         ${config.tinyx.caddy.publicRoutes}
         handle {
           import not-found
@@ -61,7 +64,7 @@
     group = "Infra";
     order = 30;
     icon = "caddy.png";
-    description = "Proxy reverso, *.lab e tunel";
-    monitor = "http://127.0.0.1:8080";
+    description = "Proxy reverso: *.lab e túnel";
+    monitor = "http://127.0.0.1:8080/healthz";
   };
 }

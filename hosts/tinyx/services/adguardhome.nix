@@ -90,7 +90,7 @@
     group = "Infra";
     order = 10;
     icon = "adguard-home.png";
-    description = "DNS da casa, split-horizon e bloqueio";
+    description = "DNS da casa: split-horizon e bloqueio";
     widget = { type = "adguard"; url = "http://127.0.0.1:3000"; username = "santi"; password = "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"; };
   };
 }

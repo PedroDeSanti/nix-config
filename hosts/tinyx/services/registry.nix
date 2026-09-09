@@ -23,8 +23,9 @@ let
   card = s: {
     ${s.name} = {
       inherit (s) icon description;
-      siteMonitor =
-        if s.monitor != null then s.monitor else "http://127.0.0.1:${toString s.port}";
+    }
+    // lib.optionalAttrs (s.monitor != null || s.port != null) {
+      siteMonitor = if s.monitor != null then s.monitor else "http://127.0.0.1:${toString s.port}";
     }
     // lib.optionalAttrs (s.subdomain != null) { href = "https://${s.subdomain}.${labDomain}"; }
     // lib.optionalAttrs (s.widget != { }) { widget = s.widget; };

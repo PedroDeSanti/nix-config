@@ -30,20 +30,21 @@ in
 
       settings = {
         title = "tinyx";
-        language = "pt";
+        # UI strings in English: the pt locale renders uptime as "CIMA". Card texts are ours.
+        language = "en";
         theme = "dark";
         color = "slate";
         headerStyle = "clean";
         statusStyle = "dot";
         target = "_self";
         hideVersion = true;
+        useEqualHeights = true;
         layout = lib.genAttrs groups (_: { style = "row"; columns = 3; });
       };
 
       widgets = [
         {
           resources = {
-            label = "tinyx";
             cpu = true;
             memory = true;
             cputemp = true;

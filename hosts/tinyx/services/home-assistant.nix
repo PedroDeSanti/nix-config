@@ -39,7 +39,7 @@
     group = "Casa";
     order = 10;
     icon = "home-assistant.png";
-    description = "Automacao da casa";
+    description = "Automação da casa";
     widget = { type = "homeassistant"; url = "http://127.0.0.1:8123"; key = "{{HOMEPAGE_VAR_HA_TOKEN}}"; };
   };
 }

@@ -11,7 +11,7 @@
 let
   cfg = config.tinyx.homepage;
   # Fixed display order; any other group lands after these.
-  order = [ "Casa" "Infra" ];
+  order = [ "Casa" "Apps" "Infra" ];
   groups = order ++ lib.filter (g: !(lib.elem g order)) (lib.attrNames cfg.groups);
 in
 {

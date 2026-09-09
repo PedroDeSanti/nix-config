@@ -56,7 +56,7 @@ in
             default = false;
             description = "Also reachable from the internet through the Cloudflare Tunnel.";
           };
-          group = lib.mkOption { type = lib.types.enum [ "Casa" "Infra" ]; description = "Homepage group."; };
+          group = lib.mkOption { type = lib.types.enum [ "Casa" "Apps" "Infra" ]; description = "Homepage group."; };
           order = lib.mkOption { type = lib.types.int; default = 50; description = "Position within the group."; };
           icon = lib.mkOption { type = lib.types.str; description = "dashboard-icons file name."; };
           description = lib.mkOption { type = lib.types.str; description = "One line under the card title."; };

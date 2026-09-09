@@ -11,5 +11,6 @@
     ./adguardhome.nix
     ./homepage.nix
     ./registry.nix
+    ./securo.nix
   ];
 }

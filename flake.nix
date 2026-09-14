@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # Only for the fast-moving dev tools (t3code, claude-code); see hosts/tinyx/services/t3code.nix.
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # `latest` tracks disko's stable releases.
     disko.url = "github:nix-community/disko/latest";
@@ -13,13 +15,14 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, ... }: {
+  outputs = { self, nixpkgs, disko, home-manager, ... }@inputs: {
     # `nix run .#disko` from the installer ISO: same disko and nixpkgs as the lock,
     # so the tool that partitions is the one that generates fileSystems.
     packages.x86_64-linux.disko = disko.packages.x86_64-linux.disko;
 
     nixosConfigurations.tinyx = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
       modules = [
         disko.nixosModules.disko
         ./hosts/tinyx/disko.nix

@@ -12,5 +12,6 @@
     ./homepage.nix
     ./registry.nix
     ./securo.nix
+    ./t3code.nix
   ];
 }

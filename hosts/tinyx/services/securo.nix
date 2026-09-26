@@ -78,9 +78,12 @@ let
   compose = "${docker} compose -p securo --project-directory ${stateDir} -f ${upstreamCompose} -f ${override} --env-file /etc/secrets/securo.env";
 in
 {
+  # tmpfiles re-applies owner/mode on every run (boot and each switch-to-configuration),
+  # so pgdata must carry the owner the postgres image expects (uid 999, 0700);
+  # root:root here broke the running database after an unattended switch.
   systemd.tmpfiles.rules = map (d: "d ${stateDir}/${d} 0750 root root -") [
-    "" "pgdata" "attachments" "agent_knowledge" "embedding_models" "secrets" "backups"
-  ];
+    "" "attachments" "agent_knowledge" "embedding_models" "secrets" "backups"
+  ] ++ [ "d ${stateDir}/pgdata 0700 999 999 -" ];
 
   systemd.services.securo = {
     description = "Securo (docker compose stack)";

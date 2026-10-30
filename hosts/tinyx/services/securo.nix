@@ -12,14 +12,14 @@
 # /srv/securo/backups, picked up by btrbk and restic like everything under /srv.
 { config, pkgs, lib, ... }:
 let
-  version = "0.15.1";
+  version = "0.16.6";
   stateDir = "/srv/securo";
   frontendPort = 3132;
   publicUrl = "https://securo.desanti.dev";
 
   upstreamCompose = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/securo-finance/securo/v${version}/docker-compose.prod.yml";
-    hash = "sha256-ahrUa2QpStj5P92ORqsgC9mhFS2/1VKmQpv4hLHA24c=";
+    hash = "sha256-rjXKWSkdwljdW0fx9bMJ0BjkEqquUK/j0vm6aBuZbTE=";
   };
 
   # Raw YAML rather than a generated attrset: the `!override` / `!reset` tags are how

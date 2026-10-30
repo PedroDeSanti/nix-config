@@ -49,6 +49,7 @@ in
   };
 
   # "Always latest": bump only the nixpkgs-unstable input, switch, commit the lock.
+  # Only runs on a clean working tree.
   # Refuses to proceed when the heavy packages are not in cache.nixos.org yet (a local
   # t3code build is a full pnpm+electron build; not on 8 GB). A failed switch restores
   # the previous lock. Runs as santi so the commit has the right author; nh escalates
@@ -65,8 +66,10 @@ in
     };
     script = ''
       set -euo pipefail
-      if ! git diff --quiet -- flake.lock; then
-        echo "flake.lock has uncommitted changes; not touching it"; exit 0
+      # The switch deploys the whole working tree, so any uncommitted change (not just
+      # the lock) would go live unreviewed at night. Skip until everything is committed.
+      if [ -n "$(git status --porcelain)" ]; then
+        echo "working tree has uncommitted changes; not switching"; exit 0
       fi
       nix flake update nixpkgs-unstable
       if git diff --quiet -- flake.lock; then echo "nixpkgs-unstable unchanged"; exit 0; fi

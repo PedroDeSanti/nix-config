@@ -12,6 +12,7 @@
     ./homepage.nix
     ./registry.nix
     ./securo.nix
+    ./kicad-prism.nix
     ./t3code.nix
   ];
 }

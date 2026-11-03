@@ -15,19 +15,22 @@
 # pick them up.
 { config, pkgs, lib, ... }:
 let
-  version = "4.0.0-alpha";
+  version = "5.2.0-alpha";
   stateDir = "/srv/kicad-prism";
   frontendPort = 3140;
   publicUrl = "https://prism.desanti.dev";
 
   bundle = pkgs.fetchzip {
     url = "https://github.com/krishna-swaroop/KiCAD-Prism/releases/download/v${version}/kicad-prism-v${version}-linux-amd64.tar.gz";
-    hash = "sha256-jo1Ws3rqCnS0oo+nIJgZXTFZ9g2Et6fNbFMTtt+VrYE=";
+    hash = "sha256-olk9v1YmAeDiB2ZjKLriZOIRQzTkSdiRJLiHu1xoHaU=";
   };
 
   # Upstream defaults assume 16+ GB and many cores. One API worker and one job at a
   # time keeps Prism next to Home Assistant and Securo; a job that outgrows its
   # ceiling gets OOM-killed inside its container and nothing else.
+  # Design bundles (v5): each stage's cap plus prism-kicad's 1.25 GiB backstop must fit
+  # the bundle budget, and the budget has to fit the worker container. Upstream measured
+  # ~2.2 GB for a large board, so 2.5 GiB caps in a 4g worker.
   settings = pkgs.writeText "kicad-prism-config.env" ''
     WORKSPACE_NAME=Team Micras
     PUBLIC_BASE_URL=${publicUrl}
@@ -44,7 +47,7 @@ let
     PRISM_BACKEND_CPU_LIMIT=2.0
     PRISM_BACKEND_MEMORY_LIMIT=1g
     PRISM_WORKER_CPU_LIMIT=4.0
-    PRISM_WORKER_MEMORY_LIMIT=2g
+    PRISM_WORKER_MEMORY_LIMIT=4g
     CATALOG_WORKER_CPU_LIMIT=2.0
     CATALOG_WORKER_MEMORY_LIMIT=1g
     PRISM_WORKER_CONCURRENCY=1
@@ -53,6 +56,11 @@ let
     PRISM_DESIGN_COMPARE_MAX_REVISION_WORKERS=1
     PRISM_DESIGN_COMPARE_MAX_INITIAL_WORKERS=1
     PRISM_DESIGN_COMPARE_MAX_PCB_WORKERS=1
+    PRISM_DESIGN_BUNDLE_CONCURRENCY=1
+    PRISM_DESIGN_BUNDLE_PARSE_MEMORY_BYTES=2684354560
+    PRISM_DESIGN_BUNDLE_BOARD_MEMORY_BYTES=2684354560
+    PRISM_DESIGN_BUNDLE_MODELS_MEMORY_BYTES=1610612736
+    PRISM_DESIGN_BUNDLE_MEMORY_BUDGET_BYTES=4026531840
     PRISM_DATABASE_POOL_MAX_SIZE=4
     PRISM_WORKER_DATABASE_POOL_MAX_SIZE=3
     CATALOG_WORKER_DATABASE_POOL_MAX_SIZE=2

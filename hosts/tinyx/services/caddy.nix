@@ -14,7 +14,7 @@
     enable = true;
     package = pkgs.caddy.withPlugins {
       plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
-      hash = "sha256-PWadA5qr/gR2qDcT8l8u1Xku7LM2HIfWTLOkzezCYy0=";
+      hash = "sha256-tubXIDCJnO2mvdnPlZclwDhNGaeeYLSt7lnni3+pXDo=";
     };
     # CLOUDFLARE_API_TOKEN for the DNS-01 challenge (DNS:Edit on desanti.dev only).
     environmentFile = "/etc/secrets/cloudflare-dns.env";
